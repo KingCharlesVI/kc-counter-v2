@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Counter from './components/Counter'
 import Log from './components/Log'
 
-const API_URL = 'http://localhost:6020/api'
+const API_URL = '/api'
 
 function App() {
   const [count, setCount] = useState(0)

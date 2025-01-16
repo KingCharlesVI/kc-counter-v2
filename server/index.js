@@ -3,6 +3,21 @@ import express from 'express'
 import sqlite3 from 'sqlite3'
 import { open } from 'sqlite'
 import cors from 'cors'
+import { networkInterfaces } from 'os'
+
+// Function to get local IP address
+function getLocalIP() {
+  const nets = networkInterfaces()
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+      if (net.family === 'IPv4' && !net.internal) {
+        return net.address
+      }
+    }
+  }
+  return 'localhost'
+}
 
 const app = express()
 app.use(express.json())
@@ -82,6 +97,7 @@ app.get('/api/logs', async (req, res) => {
 })
 
 const PORT = process.env.PORT || 6020
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`)
+  console.log(`Network access: http://${getLocalIP()}:${PORT}`)
 })
